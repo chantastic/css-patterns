@@ -45,12 +45,12 @@ class. How do we do that without extension?
 Lots of nouns. Let in rain.
 
 ```css
-.person
-.select
-.cat
-.burger
-.btn
-.rainbow
+.person { ... }
+.select { ... }
+.cat { ... }
+.burger { ... }
+.btn { ... }
+.rainbow { ... }
 ```
 
 ### Attribute Noun
@@ -74,12 +74,12 @@ This frees us up to use `.cat-breed` as a `.breed` decorator.
 Adjectives decorate a noun. Do the same with your classes; separate with a dash.
 
 ```css
-.irritating-person
-.large-select
-.spayed-cat
-.veggie-burger
-.dangerous-btn
-.double-rainbow
+.irritating-person { ... }
+.large-select { ... }
+.spayed-cat { ... }
+.veggie-burger { ... }
+.dangerous-btn { ... }
+.double-rainbow { ... }
 ```
 
 ### verbs
@@ -88,8 +88,8 @@ Verbs should be reserved for actions. These would both be legal if used on page
 actions:
 
 ```css
-.destroy-btn.btn
-.show-btn
+.destroy-btn { ... }
+.show-btn { ... }
 ```
 
 _used very similar to adjectives_
@@ -101,8 +101,8 @@ State should be represented by a class with one verb prefix.
 Verb-prefixed classes must never have a definition in the global scope:
 
 ```css
-.is-current { // illegal }
-.person.is-current { // legal }
+.is-current { /* illegal */ }
+.person.is-current { /* legal */ }
 ```
 
 I use `is-` as my prefix. I try to stick exclusively to `is`. If I myself doing
@@ -131,16 +131,16 @@ expected to do more, it should be decorated to do that.
 
 ```html
 <div class="burger">  ... </div>
-<div class="veggie-burger.burger">  ... </div>
-<div class="bean-burger.burger">  ... </div>
+<div class="veggie-burger burger"> ... </div>
+<div class="bean-burger   burger"> ... </div>
 ```
 
 It is not appropriate is to change `.burger` based on context:
 
 ```css
 /* illegal */
-veggie .burger { }
-bean .burger { }
+.veggie .burger { ... }
+.bean .burger { ... }
 ```
 
 ### open-closed
@@ -148,9 +148,15 @@ bean .burger { }
 Eagerly decorate classes; resist changing them.
 
 ```css
-.person
-.admin-person.person
-.owner-admin-person.admin-person.person
+.person { ... }
+.admin-person { ... }
+.owner-admin-person { ... }
+```
+
+```html
+<div class="person"> ... </div>
+<div class="admin-person person"> ... </div>
+<div class="owner-admin-person person"> ... </div>
 ```
 
 A simple rule is this: the fewer nouns/adjectives/etc., the more resistant you should
@@ -175,10 +181,11 @@ both `admin-person` and `person`.
 `.person` can be replaced substitute class that fulfills the same expectations:
 
 ```css
-.person { display: inline-block }
-.admin-person { background-color: gold}
+.person       { display: inline-block }
 
-.mock-inline { display: inline-block }
+.admin-person { background-color: gold }
+
+.mock-inline  { display: inline-block }
 ```
 
 ```html
@@ -196,5 +203,5 @@ both `admin-person` and `person`.
 
 ## What about the idea of not coupling styles to models
 
-I see this as a scale&reg; concern. Most systems I've worked are worse for
-having been normalized.
+I see this as a Scale&reg; concern. Most systems I've worked are worse for
+being prematurely concerned with "scale" and normalizing classes to early.
