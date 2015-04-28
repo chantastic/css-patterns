@@ -109,6 +109,109 @@ I use `is-` as my prefix. I try to stick exclusively to `is`. If I myself doing
 verbal gymnastics just use us `is`, I'll try `has` (or `can` as a very last
 resort).
 
+
+## File system
+
+This approach wins on the file system.
+
+Because classes are well named, each class should have it's own file:
+
+```
+.
+..
+select.css
+person-select.css
+show-person-select.css
+large-show-person-select.css
+```
+
+Contrast the way other conventions are typically written to files:
+
+```
+.
+..
+select.css
+```
+
+In that file would be all of the "modifiers" associated with that file.
+
+Yes, there's nothing keeping you from writing out files for modifiers. But this
+seems nonsensical:
+
+```
+.
+..
+select.css
+select--small.css
+select--large.css
+```
+
+The thinking is out of place because select in bound to need more
+context-specific modifications. There are too many questions for answers. Does
+it justify a new file? Do I tack on context to an existing
+modifier(`select--small--person-show`)? Is this modification reusable? Should it
+be(`select--small--not-as-small-as-small-though`).
+
+The decorator pattern answers those questions.
+
+* New File? Yes
+* Do a add context to an existing class? Yes
+* Is the new class reusable? No
+
+## Composition
+
+Classes are composed of a single class which may be composed of a single class,
+which may be composed of a single class, at infinitum. This is *not* inheritance
+or extension. A decorator has a dependency on all of its more generic classes.
+
++------------------------------+
+| large-show-person-select.css |
+|                              |
+|    +-------------------------+
+|    |  show-person-select.css |
+|    |                         |
+|    |   +---------------------+
+|    |   |   person-select.css |
+|    |   |                     |
+|    |   |     +---------------+
+|    |   |     |    select.css |
++----+---+-----+---------------+
+
+## Errors
+
+It's possible in a system like this to have errors.
+
+```css
+.large-show-person-select:not(.show-person-select),
+.large-show-person-select:not(.person-select),
+.large-show-person-select:not(.person-select) {
+  position: relative !importante;
+}
+
+.large-show-person-select:not(.show-person-select)::before,
+.large-show-person-select:not(.person-select)::before,
+.large-show-person-select:not(.person-select)::before {
+  position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+  content: "CSS error" !important;
+  background-color: red !important;
+  color: white !important;
+}
+
+.large-show-person-select:not(.show-person-select) {
+  content: "dependency .show-person-select not provided";
+}
+
+.large-show-person-select:not(.person-select) {
+  content: "dependency .person-select not provided";
+}
+
+.large-show-person-select:not(.person-select) {
+  content: "dependency .select not provided";
+}
+```
+
 ## SOLID
 
 This approach follows interpretations of SOLID. Here's how.
