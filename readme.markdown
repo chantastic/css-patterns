@@ -164,6 +164,7 @@ Classes are composed of a single class which may be composed of a single class,
 which may be composed of a single class, at infinitum. This is *not* inheritance
 or extension. A decorator has a dependency on all of its more generic classes.
 
+```
 +------------------------------+
 | large-show-person-select.css |
 |                              |
@@ -176,6 +177,7 @@ or extension. A decorator has a dependency on all of its more generic classes.
 |    |   |     +---------------+
 |    |   |     |    select.css |
 +----+---+-----+---------------+
+```
 
 ## Errors
 
