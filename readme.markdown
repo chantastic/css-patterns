@@ -1,12 +1,12 @@
 # CSS Patterns
 
-This is how I'm writing CSS. It's hard to say if these ideas are objectively
-"good." I can say that when I write this way things seem to fall into place and
-I paint myself into fewer corners.
+This is how I'm writing CSS. It's hard to say if these ideas are "good." I can
+say that when I write this way things seem to fall into place and I paint myself
+into fewer corners.
 
 # The 140 character pitch
 
-Ultimately scalable CSS without fake-modules or silly naming. It's modeled after
+Scalable CSS without fake-modules or silly naming. It's modeled after
 SOLID and Ruby decorators.
 
 ## The decorator pattern
@@ -30,12 +30,12 @@ and be instantiated with a new `Burger` when created. `VeggieBurger` doesn't
 
 This is what we're trying to mimic in CSS.
 
-If you have a `.veggie-burger`, it should decorate the more generic `.burger`
+If you have a `.VeggieBurger`, it should decorate the more generic `.Burger`
 class. How do we do that without extension?
 
 ```html
-<div class="veggie-burger burger">...</div>
-<div class="bean-burger   burger">...</div>
+<div class="VeggieBurger Burger">...</div>
+<div class="BeanBurger   Burger">...</div>
 ```
 
 ## Language Parts
@@ -45,41 +45,41 @@ class. How do we do that without extension?
 Lots of nouns. Let in rain.
 
 ```css
-.person { ... }
-.select { ... }
-.cat { ... }
-.burger { ... }
-.btn { ... }
-.rainbow { ... }
+.Person { ... }
+.Select { ... }
+.Cat { ... }
+.Burger { ... }
+.Btn { ... }
+.Rainbow { ... }
 ```
 
 ### Attribute Noun
 
-Use an underscore for class attributes: `.noun_attribute`
+Use an underscore for class attributes: `.Noune_attribute`
 
-Let's say a `.cat` has a `.breed`. `.breed` could also be  a first-class noun of
+Let's say a `.Cat` has a `.Breed`. `.Breed` could also be  a first-class noun of
 it's own. In a Rails app, Breed might be a normalized resource.
 
-In this case `.cat` **belongs_to** a `.breed`, I'll use a single underscore.
+In this case `.Cat` **belongs_to** a `.Breed`, I'll use a single underscore.
 
-`.cat_breed`
+`.Cat_breed`
 
-This suggests that `.cat_breed` isn't a decorator on `.breed` but an attribute
-of `.cat`.
+This suggests that `.Cat_breed` isn't a decorator on `.Breed` but an attribute
+of `.Cat`.
 
-This frees us up to use `.cat-breed` as a `.breed` decorator.
+This frees us up to use `.CatBreed` as a `.Breed` decorator.
 
 ### Adjectives
 
 Adjectives decorate a noun. Do the same with your classes; separate with a dash.
 
 ```css
-.irritating-person { ... }
-.large-select { ... }
-.spayed-cat { ... }
-.veggie-burger { ... }
-.dangerous-btn { ... }
-.double-rainbow { ... }
+.IrritatingPerson { ... }
+.LargeSelect { ... }
+.SpayedCat { ... }
+.VeggieBurger { ... }
+.DangerousBtn { ... }
+.DoubleRainbow { ... }
 ```
 
 ### verbs
@@ -88,8 +88,8 @@ Verbs should be reserved for actions. These would both be legal if used on page
 actions:
 
 ```css
-.destroy-btn { ... }
-.show-btn { ... }
+.DestroyBtn { ... }
+.ShowBtn { ... }
 ```
 
 _used very similar to adjectives_
@@ -102,7 +102,7 @@ Verb-prefixed classes must never have a definition in the global scope:
 
 ```css
 .is-current { /* illegal */ }
-.person.is-current { /* legal */ }
+.Person.is-current { /* legal */ }
 ```
 
 I use `is-` as my prefix. I try to stick exclusively to `is`. If I myself doing
@@ -119,10 +119,10 @@ Because classes are well named, each class should have it's own file:
 ```
 .
 ..
-select.css
-person-select.css
-show-person-select.css
-large-show-person-select.css
+Select.css
+PersonSelect.css
+ShowPersonSelect.css
+LargeShowPersonSelect.css
 ```
 
 Contrast the way other conventions are typically written to files:
@@ -130,7 +130,7 @@ Contrast the way other conventions are typically written to files:
 ```
 .
 ..
-select.css
+Select.css
 ```
 
 In that file would be all of the "modifiers" associated with that file.
@@ -141,22 +141,22 @@ seems nonsensical:
 ```
 .
 ..
-select.css
-select--small.css
-select--large.css
+Select.css
+Select--small.css
+Select--large.css
 ```
 
 The thinking is out of place because select in bound to need more
 context-specific modifications. There are too many questions for answers. Does
 it justify a new file? Do I tack on context to an existing
-modifier(`select--small--person-show`)? Is this modification reusable? Should it
-be(`select--small--not-as-small-as-small-though`).
+modifier(`Select--small--person-show`)? Is this modification reusable? Should it
+be(`Select--small--not-as-small-as-small-though`).
 
 The decorator pattern answers those questions.
 
 * New File? Yes
 * Do a add context to an existing class? Yes
-* Is the new class reusable? No
+* Is the new class reusable in unrelated contexts? No
 
 ## Composition
 
@@ -165,18 +165,18 @@ which may be composed of a single class, at infinitum. This is *not* inheritance
 or extension. A decorator has a dependency on all of its more generic classes.
 
 ```
-+------------------------------+
-| large-show-person-select.css |
-|                              |
-|    +-------------------------+
-|    |  show-person-select.css |
-|    |                         |
-|    |   +---------------------+
-|    |   |   person-select.css |
-|    |   |                     |
-|    |   |     +---------------+
-|    |   |     |    select.css |
-+----+---+-----+---------------+
++---------------------------+
+| LargeShowPersonSelect.css |
+|                           |
+| +-------------------------+
+| |    ShowPersonSelect.css |
+| |                         |
+| |   +---------------------+
+| |   |    PersonSelect.css |
+| |   |                     |
+| |   |     +---------------+
+| |   |     |    Select.css |
++-+---+-----+---------------+
 ```
 
 ## Errors
@@ -184,15 +184,15 @@ or extension. A decorator has a dependency on all of its more generic classes.
 It's possible in a system like this to have errors.
 
 ```css
-.large-show-person-select:not(.show-person-select),
-.large-show-person-select:not(.person-select),
-.large-show-person-select:not(.person-select) {
+.LargeShowPersonSelect:not(.ShowPersonSelect),
+.LargeShowPersonSelect:not(.PersonSelect),
+.LargeShowPersonSelect:not(.PersonSelect) {
   position: relative !importante;
 }
 
-.large-show-person-select:not(.show-person-select)::before,
-.large-show-person-select:not(.person-select)::before,
-.large-show-person-select:not(.person-select)::before {
+.LargeShowPersonSelect:not(.ShowPersonSelect)::before,
+.LargeShowPersonSelect:not(.PersonSelect)::before,
+.LargeShowPersonSelect:not(.PersonSelect)::before {
   position: absolute !important;
     width: 100% !important;
     height: 100% !important;
@@ -201,15 +201,15 @@ It's possible in a system like this to have errors.
   color: white !important;
 }
 
-.large-show-person-select:not(.show-person-select) {
+.LargeShowPersonSelect:not(.ShowPersonSelect) {
   content: "dependency .show-person-select not provided";
 }
 
-.large-show-person-select:not(.person-select) {
+.LargeShowPersonSelect:not(.PersonSelect) {
   content: "dependency .person-select not provided";
 }
 
-.large-show-person-select:not(.person-select) {
+.LargeShowPersonSelect:not(.PersonSelect) {
   content: "dependency .select not provided";
 }
 ```
@@ -220,32 +220,32 @@ This approach follows interpretations of SOLID. Here's how.
 
 ### Single responsibility
 
-`.burger` should do only one thing&mdash;visually represent a `.burger`. If it's
+`.Burger` should do only one thing&mdash;visually represent a `.Burger`. If it's
 expected to do more, it should be decorated to do that.
 
 ```css
-.burger {
+.Burger {
   display: block;
   color: pinkish
 }
 
-.veggie-burger { color: green }
+.VeggieBurger { color: green }
 
-.bean-burger { color: lightbrown }
+.BeanBurger { color: lightbrown }
 ```
 
 ```html
-<div class="burger">  ... </div>
-<div class="veggie-burger burger"> ... </div>
-<div class="bean-burger   burger"> ... </div>
+<div class="Burger">  ... </div>
+<div class="VeggieBurger Burger"> ... </div>
+<div class="BeanBurger   Burger"> ... </div>
 ```
 
 It is not appropriate is to change `.burger` based on context:
 
 ```css
 /* illegal */
-.veggie .burger { ... }
-.bean .burger { ... }
+.Veggie .Burger { ... }
+.Bean .Burger { ... }
 ```
 
 ### open-closed
@@ -253,15 +253,15 @@ It is not appropriate is to change `.burger` based on context:
 Eagerly decorate classes; resist changing them.
 
 ```css
-.person { ... }
-.admin-person { ... }
-.owner-admin-person { ... }
+.Person { ... }
+.AdminPerson { ... }
+.OwnerAdminPerson { ... }
 ```
 
 ```html
-<div class="person"> ... </div>
-<div class="admin-person person"> ... </div>
-<div class="owner-admin-person person"> ... </div>
+<div class="Person"> ... </div>
+<div class="AdminPerson Person"> ... </div>
+<div class="OwnerAdminPerson Person"> ... </div>
 ```
 
 A simple rule is this: the fewer nouns/adjectives/etc., the more resistant you should
@@ -280,24 +280,24 @@ Err on the side of creating too many classes.
 ### Dependency Inversion Principle
 
 Classes that decorate have an implicit dependency on the classes that they
-decorate. `.admin-person` depends on `.person`. `owner-admin-person` depends on
-both `admin-person` and `person`.
+decorate. `.AdminPerson` depends on `.Person`. `.OwnerAdminPerson` depends on
+both `.AdminPerson` and `.Person`.
 
-`.person` can be replaced substitute class that fulfills the same expectations:
+`.Person` can be replaced substitute class that fulfills the same expectations:
 
 ```css
-.person       { display: inline-block }
+.Person       { display: inline-block }
 
-.admin-person { background-color: gold }
+.AdminPerson { background-color: gold }
 
 .mock-inline  { display: inline-block }
 ```
 
 ```html
 <!-- all the same -->
-<div class="admin-person person"> ... </div>
-<div class="admin-person mock-inline"> ... </div>
-<div class="admin-person" style="display: inline-block"> ... </div>
+<div class="AdminPerson Person"> ... </div>
+<div class="AdminPerson mock-inline"> ... </div>
+<div class="AdminPerson" style="display: inline-block"> ... </div>
 ```
 
 # Further Reading
